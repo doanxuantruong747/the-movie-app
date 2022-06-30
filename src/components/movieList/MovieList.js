@@ -28,7 +28,7 @@ const MovieList = (props) => {
             setItems(response.results);
         }
         getList();
-    }, []);
+    }, [props]);
 
     return (
 
