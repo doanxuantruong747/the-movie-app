@@ -15,7 +15,8 @@ const MovieGrid = (props) => {
     const [totalPage, setTotalPage] = useState(0);
     const { keyword } = useParams();
     const [genres, setgenres] = useState([])
-    const [value, setvalue] = useState(null)
+    const [value, setvalue] = useState(0)
+
 
     useEffect(() => {
         const getList = async () => {
@@ -37,6 +38,7 @@ const MovieGrid = (props) => {
             }
             setItems(response.results);
             setTotalPage(response.total_pages);
+
         }
         getList();
     }, [props.category, keyword]);
@@ -63,6 +65,7 @@ const MovieGrid = (props) => {
         }
         setItems([...items, ...response.results]);
         setPage(page + 1);
+
     }
 
     useEffect(() => {
@@ -70,13 +73,14 @@ const MovieGrid = (props) => {
             const params = {};
             const response = await tmdbApi.getGenre(props.category, { params });
             setgenres(response.genres);
+
         }
         getGenre();
     }, [props.category]);
 
     return (
         <>
-            {console.log(value)}
+
             <div className="section mb-3">
                 <Box sx={{ display: 'flex', justifyContent: 'space-evenly' }}>
                     <MovieSearch category={props.category} keyword={keyword} />
@@ -87,7 +91,9 @@ const MovieGrid = (props) => {
             <Grid container spacing={2} mt={1}>
 
                 {items
-                    .filter((item) => !value ? item.genre_ids : (item.genre_ids.slice(0, 1)) == value)
+
+                    .filter((item) => !value ? item.genre_ids : (item.genre_ids.slice(0, 1)).toString() === value.toString())
+
                     .map((item, index) => (
                         <Grid key={index} item xs={6} md={4} lg={2}>
                             <MovieCard category={props.category} item={item} key={item.id} />
